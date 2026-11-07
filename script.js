@@ -62,8 +62,14 @@ function onPlayerStateChange(event) {
 // CONTROLLI
 function playYouTube(videoId, title) {
     if (!isPlayerReady) { alert("Player in caricamento..."); return; }
+    
+    // Rimuove la classe hidden e aggiunge visible per far apparire la barra
+    const bar = document.getElementById('now-playing-bar');
+    bar.classList.remove('hidden');
+    // Piccolo timeout per far partire l'animazione
+    setTimeout(() => bar.classList.add('visible'), 10);
+    
     document.getElementById('now-playing-title').innerText = title;
-    document.getElementById('now-playing-bar').classList.add('visible');
     player.loadVideoById(videoId);
     player.playVideo();
 }
@@ -76,7 +82,10 @@ function seekForward() { if (player && player.getCurrentTime) player.seekTo(play
 function seekBackward() { if (player && player.getCurrentTime) player.seekTo(Math.max(0, player.getCurrentTime() - 10), true); }
 function closePlayer() {
     if (player && player.stopVideo) player.stopVideo();
-    document.getElementById('now-playing-bar').classList.remove('visible');
+    const bar = document.getElementById('now-playing-bar');
+    bar.classList.remove('visible');
+    // Nasconde del tutto dopo l'animazione
+    setTimeout(() => bar.classList.add('hidden'), 400);
     document.getElementById('progress-bar-fill').style.width = '0%';
     clearInterval(progressInterval);
 }
@@ -93,8 +102,7 @@ function startProgressBar() {
     }, 500);
 }
 
-// LOGICA DI RICERCA (Finta ma funzionante per i test)
-// Dato che non abbiamo un database reale, creiamo una lista di "canzoni" che l'utente può cercare
+// DATABASE CANZONI (Per la ricerca finta)
 const databaseCanzoni = [
     { id: 'fCE9mDVdr5A', title: 'GUERRILIA', artist: 'NABI' },
     { id: 'lKSPKbBVGgU', title: 'WROOM WROOM', artist: 'NABI' },
@@ -110,7 +118,7 @@ document.getElementById('search-input').addEventListener('input', function(e) {
     const resultsContainer = document.getElementById('search-results');
     resultsContainer.innerHTML = '';
 
-    if (query.length < 2) return; // Inizia a cercare dopo 2 caratteri
+    if (query.length < 2) return; 
 
     const filtered = databaseCanzoni.filter(song => 
         song.title.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query)
@@ -137,11 +145,10 @@ document.getElementById('search-input').addEventListener('input', function(e) {
     });
 });
 
-// LOGICA LIBRERIA (Aggiunta e visualizzazione)
-let myLibrary = []; // Array che conterrà le canzoni aggiunte
+// LOGICA LIBRERIA
+let myLibrary = [];
 
 function addToLibrary(id, title, artist) {
-    // Controlla se esiste già
     if (myLibrary.some(song => song.id === id)) {
         alert("Questa canzone è già nella tua libreria!");
         return;
@@ -178,7 +185,6 @@ function updateLibraryView() {
     }
 }
 
-// Inizializza la vista della libreria al caricamento
 document.addEventListener("DOMContentLoaded", () => {
     updateLibraryView();
 });
