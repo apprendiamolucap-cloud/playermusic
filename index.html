@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cherry Soundscape - Santos_Lukas</title>
-    <!-- Favicon per evitare errore 404 -->
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Manifest per PWA (opzionale, ma utile per l'icona) -->
+    <!-- Manifest per PWA -->
     <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="logo.png">
 </head>
@@ -32,7 +32,6 @@
         <!-- SCHERMATA LOGIN -->
         <div id="screen-login" class="screen active-screen">
             <div class="login-box">
-                <!-- LOGO CARICATO DA GITHUB -->
                 <img src="logo.png" alt="Cherry Soundscape Logo" style="width: 100px; height: 100px; border-radius: 20px; margin-bottom: 15px; object-fit: cover;">
                 <h1 class="logo-text">Cherry<br>Soundscape</h1>
                 <p>Benvenuto, Santos_Lukas</p>
@@ -62,7 +61,6 @@
                 </div>
             </section>
 
-            <!-- SEZIONE GUIDA INSTALLAZIONE -->
             <section class="section" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
                 <div class="section-header"><h2>📲 Installa l'app</h2></div>
                 <div style="background: #3a1823; padding: 15px; border-radius: 12px; margin-bottom: 10px;">
@@ -83,7 +81,6 @@
                 <i class="fas fa-search"></i>
                 <input type="text" id="search-input" placeholder="Cerca brani, artisti...">
             </div>
-            <!-- I risultati della ricerca appariranno qui -->
             <div id="search-results" class="section"></div>
         </div>
 
@@ -100,9 +97,7 @@
                 </div>
             </section>
             <section class="section">
-                <div class="track-list" id="main-track-list">
-                    <!-- Popolato da JS -->
-                </div>
+                <div class="track-list" id="main-track-list"></div>
             </section>
         </div>
 
@@ -129,8 +124,8 @@
             <a href="#" data-target="screen-library"><i class="fas fa-book"></i></a>
         </nav>
 
-        <!-- BARRA DI RIPRODUZIONE (FISSA IN FONDO) -->
-        <div id="now-playing-bar">
+        <!-- BARRA DI RIPRODUZIONE (Inizialmente Nascosta) -->
+        <div id="now-playing-bar" class="hidden">
             <div class="progress-bar-bg"><div id="progress-bar-fill"></div></div>
             <div id="youtube-player-container" style="display: none;"></div>
             <div class="player-content">
