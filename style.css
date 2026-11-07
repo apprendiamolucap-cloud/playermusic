@@ -141,3 +141,89 @@ h1 { font-size: 26px; font-weight: 600; }
 .leaf:nth-child(8) { left: 5%; animation-duration: 7s; animation-delay: 2.5s; }
 .leaf:nth-child(9) { left: 65%; animation-duration: 8s; animation-delay: 0s; transform: scale(1.3); }
 @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+/* --- NOW PLAYING BAR (Barra di riproduzione in basso) --- */
+#now-playing-bar {
+    position: absolute;
+    bottom: -120px; /* Nascosta di default sotto lo schermo */
+    left: 0;
+    width: 100%;
+    background: rgba(42, 16, 25, 0.98);
+    backdrop-filter: blur(15px);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animazione elastica */
+    z-index: 200; /* Sopra tutto */
+    padding-bottom: env(safe-area-inset-bottom); /* Supporto iPhone X+ */
+}
+
+#now-playing-bar.visible {
+    bottom: 0; /* Scivola su */
+}
+
+/* Barra di progresso in alto */
+.progress-bar-bg {
+    width: 100%;
+    height: 4px;
+    background: #3a1823;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+}
+#progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #DE3163, #FFB7C5);
+    transition: width 0.2s linear;
+}
+
+.player-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+}
+
+.player-info h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 2px;
+}
+.player-info p {
+    font-size: 11px;
+    color: #b3a1a8;
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ctrl-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s;
+}
+.ctrl-btn:hover { color: #FFB7C5; }
+
+.main-ctrl {
+    background: #DE3163;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    box-shadow: 0 0 10px rgba(222, 49, 99, 0.5);
+    transition: transform 0.1s;
+}
+.main-ctrl:active { transform: scale(0.95); }
+
+.close-btn { color: #7a5c66; margin-left: 5px; }
