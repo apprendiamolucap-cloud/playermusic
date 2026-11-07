@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #12060a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* --- APP CONTAINER (Il "telefono") --- */
+.app-container {
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    max-height: 850px;
+    background-color: #2a1019;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    color: white;
+    box-shadow: 0 0 20px rgba(255, 183, 197, 0.1);
+}
+.app-container::-webkit-scrollbar { display: none; }
+.app-container { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* --- COMPONENTI BASE --- */
+header { padding: 20px; }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.date { font-size: 12px; color: #b3a1a8; }
+.profile-pic { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #FFB7C5; cursor: pointer; }
+h1 { font-size: 26px; font-weight: 600; }
+.section { padding: 15px 20px; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.section-header h2 { font-size: 16px; font-weight: 500; }
+.section-header a { color: #FFB7C5; font-size: 12px; text-decoration: none; }
+
+/* --- HOME --- */
+.artists-row { display: flex; gap: 20px; overflow-x: auto; }
+.artist { text-align: center; }
+.artist img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #DE3163; }
+.artist p { font-size: 12px; margin-top: 5px; color: #d1d1d1; }
+
+.recent-row { display: flex; gap: 15px; }
+.recent-card { flex: 1; height: 120px; border-radius: 15px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+.card-1 { background: linear-gradient(135deg, #DE3163, #FFB7C5); }
+.card-2 { background: linear-gradient(135deg, #8b1c3f, #ff5c8a); }
+.tag { font-size: 10px; opacity: 0.8; }
+.recent-card h3 { font-size: 16px; font-weight: 600; }
+.play-btn-small { position: absolute; bottom: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: white; border: none; color: #DE3163; cursor: pointer; }
+
+/* --- RICERCA --- */
+.search-bar { background: #3a1823; margin: 0 20px 20px 20px; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 10px; }
+.search-bar i { color: #FFB7C5; }
+.search-bar input { background: transparent; border: none; color: white; width: 100%; outline: none; }
+.search-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+.tag-pill { background: #DE3163; padding: 8px 15px; border-radius: 20px; font-size: 12px; }
+
+/* --- LIBRERIA --- */
+.playlist-header { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; }
+.playlist-cover { width: 100px; height: 100px; background: linear-gradient(135deg, #DE3163, #FFB7C5); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 40px; color: white; flex-shrink: 0; }
+.playlist-info h2 { font-size: 20px; margin-bottom: 5px; }
+.playlist-info p { font-size: 12px; color: #b3a1a8; margin-bottom: 10px; }
+.play-all-btn { background: #FFB7C5; color: #1a0b12; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 5px; }
+
+.track-list { display: flex; flex-direction: column; gap: 15px; }
+.track-item { display: flex; align-items: center; gap: 15px; background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 10px; cursor: pointer; transition: background 0.2s; }
+.track-item:hover { background: rgba(255, 255, 255, 0.1); }
+.track-number { font-size: 14px; color: #FFB7C5; width: 20px; }
+.track-info { flex: 1; }
+.track-info h4 { font-size: 14px; }
+.track-info p { font-size: 12px; color: #b3a1a8; }
+
+/* --- LOGIN E PROFILO --- */
+.login-box { padding: 40px 20px; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100vh; }
+.logo-text { font-size: 40px; line-height: 1.1; color: #FFB7C5; margin-bottom: 10px; font-family: serif; }
+.login-box p { color: #b3a1a8; margin-bottom: 30px; font-size: 14px; }
+.login-input { width: 100%; background: #3a1823; border: 1px solid #DE3163; padding: 15px; border-radius: 12px; color: white; margin-bottom: 15px; outline: none; }
+.login-btn { width: 100%; background: #DE3163; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 10px; }
+.signature-small { display: block; margin-top: 40px; font-family: serif; color: #FFB7C5; font-size: 18px; letter-spacing: 1px; }
+.profile-pic-large { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #DE3163; object-fit: cover; }
+
+/* --- GESTIONE SCHERMATE --- */
+.screen { display: none; padding-bottom: 160px; /* Spazio extra per far vedere tutto sopra il player */ }
+.screen.active-screen { display: block; }
+
+/* --- BARRA DI NAVIGAZIONE --- */
+.bottom-nav {
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 70px;
+    background-color: rgba(42, 16, 25, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex; justify-content: space-around; align-items: center;
+    border-top-left-radius: 25px; border-top-right-radius: 25px;
+    border-top: 1px solid rgba(255, 183, 197, 0.2);
+    z-index: 100;
+}
+.bottom-nav a { color: #7a5c66; font-size: 20px; text-decoration: none; padding: 10px; }
+.bottom-nav a.active { color: #FFB7C5; }
+
+/* --- MINI PLAYER (Il player per la musica) --- */
+#mini-player {
+    position: absolute;
+    bottom: 80px; /* Messo subito sopra la barra di navigazione */
+    left: 10px; right: 10px;
+    background: #3a1823;
+    border-radius: 12px;
+    display: flex; align-items: center;
+    padding: 5px; gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    z-index: 90;
+    overflow: hidden;
+    border: 1px solid #DE3163;
+}
+#mini-player.mini-player-hidden { transform: translateY(150px); opacity: 0; pointer-events: none; }
+#mini-player.mini-player-visible { transform: translateY(0); opacity: 1; }
+#youtube-player-container { width: 80px; height: 60px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: black; }
+.mini-player-info { flex: 1; display: flex; justify-content: space-between; align-items: center; padding-right: 10px; }
+.mini-player-info p { font-size: 12px; color: white; }
+.close-player-btn { background: transparent; border: none; color: #FFB7C5; font-size: 16px; cursor: pointer; padding: 5px; }
+
+/* --- ANIMAZIONE FOGLIE --- */
+.leaves-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 10; }
+.leaf { position: absolute; width: 15px; height: 15px; background-color: #FFB7C5; border-radius: 0 50% 0 50%; opacity: 0.6; animation: fall linear infinite; }
+.leaf:nth-child(1) { left: 10%; animation-duration: 6s; animation-delay: 0s; }
+.leaf:nth-child(2) { left: 25%; animation-duration: 8s; animation-delay: 2s; transform: scale(0.8); }
+.leaf:nth-child(3) { left: 40%; animation-duration: 5s; animation-delay: 1s; transform: scale(1.2); }
+.leaf:nth-child(4) { left: 55%; animation-duration: 7s; animation-delay: 3s; }
+.leaf:nth-child(5) { left: 70%; animation-duration: 9s; animation-delay: 0.5s; transform: scale(0.9); }
+.leaf:nth-child(6) { left: 85%; animation-duration: 6s; animation-delay: 1.5s; transform: scale(1.1); }
+.leaf:nth-child(7) { left: 95%; animation-duration: 10s; animation-delay: 4s; }
+.leaf:nth-child(8) { left: 5%; animation-duration: 7s; animation-delay: 2.5s; }
+.leaf:nth-child(9) { left: 65%; animation-duration: 8s; animation-delay: 0s; transform: scale(1.3); }
+@keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
