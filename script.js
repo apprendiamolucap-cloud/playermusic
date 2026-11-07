@@ -5,6 +5,12 @@ function updateDate() {
 }
 updateDate();
 
+// RILEVA SAFARI E MOSTRA AVVISO
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+if (isSafari) {
+    document.getElementById('safari-warning').style.display = 'block';
+}
+
 // NAVIGAZIONE
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
@@ -35,7 +41,7 @@ document.head.appendChild(tag);
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-player-container', {
         height: '100', width: '100', videoId: '',
-        playerVars: { 'autoplay': 0, 'controls': 0, 'origin': window.location.origin },
+        playerVars: { 'autoplay': 0, 'controls': 0, 'origin': window.location.origin, 'playsinline': 1, 'mute': 1 },
         events: {
             'onReady': () => { isPlayerReady = true; },
             'onStateChange': onPlayerStateChange
@@ -87,8 +93,9 @@ function startProgressBar() {
     }, 500);
 }
 
-// LISTA CANZONI NABI
-const songs = [
+// LOGICA DI RICERCA (Finta ma funzionante per i test)
+// Dato che non abbiamo un database reale, creiamo una lista di "canzoni" che l'utente può cercare
+const databaseCanzoni = [
     { id: 'fCE9mDVdr5A', title: 'GUERRILIA', artist: 'NABI' },
     { id: 'lKSPKbBVGgU', title: 'WROOM WROOM', artist: 'NABI' },
     { id: 'J_p80876Wgw', title: 'CALIBRO', artist: 'NABI' },
@@ -97,12 +104,66 @@ const songs = [
     { id: 'Po25COLLYus', title: 'Notte in Caserma', artist: 'NABI' }
 ];
 
-// POPOLA LA LISTA
-document.addEventListener("DOMContentLoaded", () => {
+// FUNZIONE DI RICERCA
+document.getElementById('search-input').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    const resultsContainer = document.getElementById('search-results');
+    resultsContainer.innerHTML = '';
+
+    if (query.length < 2) return; // Inizia a cercare dopo 2 caratteri
+
+    const filtered = databaseCanzoni.filter(song => 
+        song.title.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query)
+    );
+
+    if (filtered.length === 0) {
+        resultsContainer.innerHTML = '<p style="color: #b3a1a8; font-size: 14px;">Nessun risultato trovato.</p>';
+        return;
+    }
+
+    filtered.forEach(song => {
+        const div = document.createElement('div');
+        div.className = 'track-item';
+        div.innerHTML = `
+            <div class="track-info">
+                <h4>${song.title}</h4>
+                <p>${song.artist}</p>
+            </div>
+            <button class="add-btn" onclick="addToLibrary('${song.id}', '${song.title}', '${song.artist}')">
+                <i class="fas fa-plus"></i>
+            </button>
+        `;
+        resultsContainer.appendChild(div);
+    });
+});
+
+// LOGICA LIBRERIA (Aggiunta e visualizzazione)
+let myLibrary = []; // Array che conterrà le canzoni aggiunte
+
+function addToLibrary(id, title, artist) {
+    // Controlla se esiste già
+    if (myLibrary.some(song => song.id === id)) {
+        alert("Questa canzone è già nella tua libreria!");
+        return;
+    }
+    
+    myLibrary.push({ id, title, artist });
+    updateLibraryView();
+    alert(`"${title}" aggiunta alla libreria!`);
+}
+
+function updateLibraryView() {
     const trackList = document.getElementById('main-track-list');
-    if (trackList) {
-        trackList.innerHTML = '';
-        songs.forEach((song, index) => {
+    const countSpan = document.getElementById('library-count');
+    
+    if (!trackList) return;
+    trackList.innerHTML = '';
+
+    if (myLibrary.length === 0) {
+        trackList.innerHTML = '<p style="color: #b3a1a8; font-size: 14px; padding: 10px;">La tua libreria è vuota. Vai su "Cerca" e aggiungi le tue canzoni preferite!</p>';
+        countSpan.innerText = `0 brani • Santos_Lukas`;
+    } else {
+        myLibrary.forEach((song, index) => {
             const div = document.createElement('div');
             div.className = 'track-item';
             div.innerHTML = `
@@ -113,5 +174,11 @@ document.addEventListener("DOMContentLoaded", () => {
             div.onclick = () => playYouTube(song.id, song.title);
             trackList.appendChild(div);
         });
+        countSpan.innerText = `${myLibrary.length} brani • Santos_Lukas`;
     }
+}
+
+// Inizializza la vista della libreria al caricamento
+document.addEventListener("DOMContentLoaded", () => {
+    updateLibraryView();
 });
