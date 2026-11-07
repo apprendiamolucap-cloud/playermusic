@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cherry Pink Music</title>
+    <title>Cherry Soundscape - Santos_Lukas</title>
+    <!-- Icona vuota per evitare errore 404 -->
+    <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Animazione Foglie di Ciliegio -->
     <div class="leaves-container">
         <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
         <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
@@ -18,9 +19,16 @@
 
     <div class="app-container">
         
-        <!-- ================= SCHERMATA 0: LOGIN ================= -->
+        <!-- SCHERMATA LOGIN -->
         <div id="screen-login" class="screen active-screen">
             <div class="login-box">
+                <!-- LOGO SVG CILIEGIA -->
+                <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 20 C50 20, 40 40, 20 50 C10 55, 10 70, 20 80 C30 90, 45 90, 50 80 C55 90, 70 90, 80 80 C90 70, 90 55, 80 50 C60 40, 50 20, 50 20 Z" fill="#DE3163"/>
+                    <path d="M50 20 C55 10, 65 5, 75 10" stroke="#2a1019" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="35" cy="60" r="5" fill="#FFB7C5"/>
+                    <circle cx="65" cy="60" r="5" fill="#FFB7C5"/>
+                </svg>
                 <h1 class="logo-text">Cherry<br>Soundscape</h1>
                 <p>Benvenuto, Santos_Lukas</p>
                 <input type="text" placeholder="Email o Username" class="login-input">
@@ -30,7 +38,7 @@
             </div>
         </div>
 
-        <!-- ================= SCHERMATA 1: HOME ================= -->
+        <!-- SCHERMATA HOME -->
         <div id="screen-home" class="screen">
             <header>
                 <div class="header-top">
@@ -39,12 +47,8 @@
                 </div>
                 <h1>Hello Bambang!</h1>
             </header>
-
             <section class="section">
-                <div class="section-header">
-                    <h2>Your favorite artist</h2>
-                    <a href="#">See all</a>
-                </div>
+                <div class="section-header"><h2>Your favorite artist</h2><a href="#">See all</a></div>
                 <div class="artists-row">
                     <div class="artist"><img src="https://i.pravatar.cc/100?img=5" alt="Raisa"><p>Raisa</p></div>
                     <div class="artist"><img src="https://i.pravatar.cc/100?img=9" alt="Ardhito"><p>Ardhito</p></div>
@@ -52,44 +56,18 @@
                     <div class="artist"><img src="https://i.pravatar.cc/100?img=12" alt="Tulus"><p>Tulus</p></div>
                 </div>
             </section>
-
-            <section class="section">
-                <div class="section-header">
-                    <h2>Recent played</h2>
-                    <a href="#">See all</a>
-                </div>
-                <div class="recent-row">
-                    <div class="recent-card card-1">
-                        <span class="tag">Daily mix 01</span>
-                        <h3>Cherry Rush</h3>
-                        <button class="play-btn-small"><i class="fas fa-play"></i></button>
-                    </div>
-                    <div class="recent-card card-2">
-                        <span class="tag">Recently played</span>
-                        <h3>Pink Horizon</h3>
-                    </div>
-                </div>
-            </section>
         </div>
 
-        <!-- ================= SCHERMATA 2: RICERCA ================= -->
+        <!-- SCHERMATA RICERCA -->
         <div id="screen-search" class="screen">
             <header><h1>Cerca</h1></header>
             <div class="search-bar">
                 <i class="fas fa-search"></i>
                 <input type="text" placeholder="Cerca brani, artisti, video...">
             </div>
-            <section class="section">
-                <div class="section-header"><h2>Ricerche del momento</h2></div>
-                <div class="search-tags">
-                    <span class="tag-pill">Raisa</span>
-                    <span class="tag-pill">Lo-fi Beats</span>
-                    <span class="tag-pill">Cherry Pop</span>
-                </div>
-            </section>
         </div>
 
-        <!-- ================= SCHERMATA 3: LIBRERIA ================= -->
+        <!-- SCHERMATA LIBRERIA -->
         <div id="screen-library" class="screen">
             <header><h1>La tua Libreria</h1></header>
             <section class="section">
@@ -97,38 +75,23 @@
                     <div class="playlist-cover"><i class="fas fa-music"></i></div>
                     <div class="playlist-info">
                         <h2>La mia Playlist</h2>
-                        <p>3 brani • Santos_Lukas</p>
-                        <button class="play-all-btn"><i class="fas fa-play"></i> Riproduci tutto</button>
+                        <p>6 brani • Santos_Lukas</p>
                     </div>
                 </div>
             </section>
             <section class="section">
-                <div class="track-list">
-                    <div class="track-item" onclick="playYouTube('dQw4w9WgXcQ')">
-                        <span class="track-number">1</span>
-                        <div class="track-info"><h4>Easy On Me</h4><p>Adele</p></div>
-                        <i class="fas fa-play-circle" style="color:#FFB7C5;"></i>
-                    </div>
-                    <div class="track-item" onclick="playYouTube('kJQP7kiw5Fk')">
-                        <span class="track-number">2</span>
-                        <div class="track-info"><h4>Despacito</h4><p>Luis Fonsi</p></div>
-                        <i class="fas fa-play-circle" style="color:#FFB7C5;"></i>
-                    </div>
-                    <div class="track-item" onclick="playYouTube('cPykUOIGisA')">
-                        <span class="track-number">3</span>
-                        <div class="track-info"><h4>NEW YORK</h4><p>NABI</p></div>
-                        <i class="fas fa-play-circle" style="color:#FFB7C5;"></i>
-                    </div>
+                <div class="track-list" id="main-track-list">
+                    <!-- Popolato da JS -->
                 </div>
             </section>
         </div>
 
-        <!-- ================= SCHERMATA 4: PROFILO ================= -->
+        <!-- SCHERMATA PROFILO -->
         <div id="screen-profile" class="screen">
             <header>
                 <div class="header-top">
                     <i class="fas fa-arrow-left" onclick="showScreen('screen-home')" style="font-size: 20px; cursor: pointer;"></i>
-                    <h1>Modifica Profilo</h1>
+                    <h1>Profilo</h1>
                     <div style="width: 20px;"></div>
                 </div>
             </header>
@@ -136,40 +99,25 @@
                 <img src="https://i.pravatar.cc/150?img=1" alt="Profilo" class="profile-pic-large">
                 <h2 style="margin-top: 15px;">Santos_Lukas</h2>
                 <p style="color: #b3a1a8; font-size: 14px;">santos@cherrymusic.com</p>
-                <div style="margin-top: 30px; text-align: left;">
-                    <label style="font-size: 12px; color: #FFB7C5;">Nome Utente</label>
-                    <input type="text" class="login-input" value="Santos_Lukas" style="margin-top: 5px;">
-                    <label style="font-size: 12px; color: #FFB7C5; display: block; margin-top: 15px;">Email</label>
-                    <input type="email" class="login-input" value="santos@cherrymusic.com" style="margin-top: 5px;">
-                    <button class="login-btn" style="margin-top: 30px;">Salva Modifiche</button>
-                </div>
             </section>
         </div>
 
-        <!-- ================= BARRA DI NAVIGAZIONE ================= -->
+        <!-- NAVIGAZIONE -->
         <nav class="bottom-nav" id="main-nav">
             <a href="#" class="active" data-target="screen-home"><i class="fas fa-home"></i></a>
             <a href="#" data-target="screen-search"><i class="fas fa-search"></i></a>
             <a href="#" data-target="screen-library"><i class="fas fa-book"></i></a>
         </nav>
-    </div>
 
-        <!-- ================= NOW PLAYING BAR (Elegante) ================= -->
+        <!-- BARRA DI RIPRODUZIONE -->
         <div id="now-playing-bar">
-            <!-- Barra di progresso sottile in alto -->
-            <div class="progress-bar-bg">
-                <div id="progress-bar-fill"></div>
-            </div>
-            
-            <!-- Contenitore video nascosto per far suonare la musica -->
+            <div class="progress-bar-bg"><div id="progress-bar-fill"></div></div>
             <div id="youtube-player-container" style="display: none;"></div>
-
             <div class="player-content">
                 <div class="player-info">
                     <h4 id="now-playing-title">Titolo Canzone</h4>
                     <p>NABI</p>
                 </div>
-                
                 <div class="player-controls">
                     <button onclick="seekBackward()" class="ctrl-btn"><i class="fas fa-backward"></i></button>
                     <button onclick="togglePlay()" id="play-pause-btn" class="ctrl-btn main-ctrl"><i class="fas fa-play"></i></button>
@@ -178,3 +126,8 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
