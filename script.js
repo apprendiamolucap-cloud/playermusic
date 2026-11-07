@@ -33,109 +33,181 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// 3. AUDIUS PLAYER (Sostituisce YouTube)
-// Carichiamo l'SDK di Audius
+// 3. INIZIALIZZAZIONE AUDIUS SDK
 const audiusScript = document.createElement('script');
 audiusScript.src = "https://cdn.jsdelivr.net/npm/@audius/sdk@latest/dist/sdk.min.js";
 audiusScript.onload = () => {
-    console.log("Audius SDK caricato!");
-    // Inizializziamo l'SDK SENZA API Key (solo lettura)
     window.audiusSdk = window.audiusSdk({
         appName: 'Cherry Soundscape'
     });
-    
-    // Popoliamo la lista appena l'SDK è pronto
-    loadNabiTracks();
+    console.log("Audius SDK pronto!");
 };
 document.head.appendChild(audiusScript);
 
-// Funzione per cercare e caricare le canzoni di NABI
-async function loadNabiTracks() {
+// 4. GESTIONE RICERCA
+const searchInput = document.querySelector('.search-bar input');
+// Aggiungiamo un contenitore per i risultati della ricerca se non esiste
+let searchResultsContainer = document.getElementById('search-results');
+if (!searchResultsContainer) {
+    searchResultsContainer = document.createElement('div');
+    searchResultsContainer.id = 'search-results';
+    searchResultsContainer.className = 'section';
+    // Lo inseriamo nella schermata di ricerca, dopo la barra
+    const searchScreen = document.getElementById('screen-search');
+    searchScreen.appendChild(searchResultsContainer);
+}
+
+// Funzione per cercare
+async function searchTracks(query) {
+    if (!query) return;
+    searchResultsContainer.innerHTML = '<p style="padding: 20px; color: #b3a1a8;">Ricerca in corso...</p>';
+    
     try {
-        // Cerchiamo le tracce dell'artista "NABI"
-        const response = await window.audiusSdk.tracks.searchTracks({ query: 'NABI' });
+        const response = await window.audiusSdk.tracks.searchTracks({ query: query });
         const tracks = response.data;
         
-        const trackList = document.querySelector('.track-list');
-        if (!trackList) return;
-        
-        trackList.innerHTML = ''; // Svuota la lista
+        searchResultsContainer.innerHTML = ''; // Svuota
         
         if (tracks.length === 0) {
-            trackList.innerHTML = '<p style="color: #b3a1a8; padding: 20px;">Nessuna traccia di NABI trovata su Audius.</p>';
+            searchResultsContainer.innerHTML = '<p style="padding: 20px; color: #b3a1a8;">Nessun risultato trovato.</p>';
             return;
         }
 
-        tracks.slice(0, 10).forEach((track, index) => { // Mostriamo le prime 10
+        const sectionHeader = document.createElement('div');
+        sectionHeader.className = 'section-header';
+        sectionHeader.innerHTML = '<h2>Risultati della ricerca</h2>';
+        searchResultsContainer.appendChild(sectionHeader);
+
+        tracks.slice(0, 15).forEach(track => {
             const trackItem = document.createElement('div');
             trackItem.className = 'track-item';
-            // Usiamo i dati di Audius per creare la riga
+            trackItem.style.cursor = 'default'; // Non cliccabile per intero
+            
             trackItem.innerHTML = `
-                <span class="track-number">${index + 1}</span>
-                <div class="track-info">
+                <div class="track-info" style="flex: 1;">
                     <h4>${track.title}</h4>
                     <p>${track.user.name}</p>
                 </div>
-                <button class="play-audius-btn" data-track-id="${track.id}">
-                    <i class="fas fa-play-circle" style="color:#FFB7C5; font-size: 20px;"></i>
+                <button class="add-to-library-btn" data-track-id="${track.id}" data-track-title="${track.title}" data-artist-name="${track.user.name}" style="background: #DE3163; border: none; color: white; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 18px; display: flex; justify-content: center; align-items: center;">
+                    <i class="fas fa-plus"></i>
                 </button>
             `;
-            trackList.appendChild(trackItem);
+            searchResultsContainer.appendChild(trackItem);
         });
 
-        // Aggiungiamo l'evento click ai pulsanti play
-        document.querySelectorAll('.play-audius-btn').forEach(btn => {
+        // Aggiungi eventi ai pulsanti "+"
+        document.querySelectorAll('.add-to-library-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const trackId = e.currentTarget.getAttribute('data-track-id');
-                playAudiusTrack(trackId);
+                const trackTitle = e.currentTarget.getAttribute('data-track-title');
+                const artistName = e.currentTarget.getAttribute('data-artist-name');
+                addToLibrary(trackId, trackTitle, artistName);
             });
         });
 
-        // Aggiorna il contatore
-        const playlistInfo = document.querySelector('.playlist-info p');
-        if (playlistInfo) {
-            playlistInfo.innerText = `${Math.min(tracks.length, 10)} brani • Santos_Lukas`;
-        }
-
     } catch (error) {
-        console.error("Errore nel caricamento delle tracce:", error);
+        console.error("Errore nella ricerca:", error);
+        searchResultsContainer.innerHTML = '<p style="padding: 20px; color: #b3a1a8;">Errore durante la ricerca.</p>';
     }
 }
 
-// Funzione per riprodurre una traccia di Audius
-async function playAudiusTrack(trackId) {
-    try {
-        // Otteniamo il link per lo streaming
-        const streamUrl = await window.audiusSdk.tracks.streamTrack({ trackId: trackId });
-        
-        // Creiamo un player audio HTML5 nascosto se non esiste
-        let audioPlayer = document.getElementById('audius-audio-player');
-        if (!audioPlayer) {
-            audioPlayer = document.createElement('audio');
-            audioPlayer.id = 'audius-audio-player';
-            document.body.appendChild(audioPlayer);
+// Ascolta l'input nella barra di ricerca (con un piccolo ritardo per non sovraccaricare)
+let searchTimeout;
+searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        searchTracks(e.target.value);
+    }, 500); // Aspetta mezzo secondo dopo che l'utente smette di scrivere
+});
+
+// 5. GESTIONE LIBRERIA (Aggiunta e visualizzazione)
+let myLibrary = []; // Array per memorizzare le canzoni aggiunte
+
+function addToLibrary(trackId, trackTitle, artistName) {
+    // Controlla se esiste già
+    if (myLibrary.some(song => song.id === trackId)) {
+        alert("Questa canzone è già nella tua libreria!");
+        return;
+    }
+    
+    myLibrary.push({ id: trackId, title: trackTitle, artist: artistName });
+    updateLibraryView();
+    
+    // Piccolo feedback visivo
+    alert(`"${trackTitle}" aggiunta alla libreria!`);
+}
+
+function updateLibraryView() {
+    const trackList = document.querySelector('#screen-library .track-list');
+    if (!trackList) return;
+
+    trackList.innerHTML = ''; // Svuota
+
+    if (myLibrary.length === 0) {
+        trackList.innerHTML = '<p style="padding: 20px; color: #b3a1a8;">La tua libreria è vuota. Cerca delle canzoni e aggiungile con il tasto +.</p>';
+    } else {
+        myLibrary.forEach((song, index) => {
+            const trackItem = document.createElement('div');
+            trackItem.className = 'track-item';
+            trackItem.setAttribute('onclick', `playAudiusTrack('${song.id}', '${song.title}')`);
+            
+            trackItem.innerHTML = `
+                <span class="track-number">${index + 1}</span>
+                <div class="track-info">
+                    <h4>${song.title}</h4>
+                    <p>${song.artist}</p>
+                </div>
+                <i class="fas fa-play-circle" style="color:#FFB7C5;"></i>
+            `;
+            trackList.appendChild(trackItem);
+        });
+    }
+
+    // Aggiorna il contatore
+    const playlistInfo = document.querySelector('.playlist-info p');
+    if (playlistInfo) {
+        playlistInfo.innerText = `${myLibrary.length} brani • Santos_Lukas`;
+    }
+}
+
+// Inizializza la vista della libreria al caricamento
+document.addEventListener("DOMContentLoaded", () => {
+    // Aspetta che l'SDK sia pronto prima di inizializzare la vista
+    const checkSdk = setInterval(() => {
+        if (window.audiusSdk) {
+            clearInterval(checkSdk);
+            updateLibraryView();
         }
+    }, 500);
+});
+
+// 6. RIPRODUZIONE AUDIO (Metodo corretto)
+let audioPlayer = new Audio(); // Usa un player audio nativo
+
+async function playAudiusTrack(trackId, trackTitle) {
+    try {
+        // USA getTrackStreamUrl per ottenere l'URL corretto
+        const streamUrl = await window.audiusSdk.tracks.getTrackStreamUrl({ trackId: trackId });
         
         audioPlayer.src = streamUrl;
         audioPlayer.play();
         
-        // Mostriamo il mini player (opzionale, per feedback visivo)
+        // Mostra il mini player
         const miniPlayer = document.getElementById('mini-player');
         if(miniPlayer) {
             miniPlayer.classList.remove('mini-player-hidden');
             miniPlayer.classList.add('mini-player-visible');
-            document.getElementById('now-playing-title').innerText = "▶ In riproduzione...";
+            document.getElementById('now-playing-title').innerText = "▶ " + trackTitle;
         }
         
     } catch (error) {
         console.error("Errore nella riproduzione:", error);
-        alert("Impossibile riprodurre questa traccia. Potrebbe non essere disponibile per lo streaming.");
+        alert("Impossibile riprodurre questa traccia.");
     }
 }
 
-// Funzione per fermare la musica (collega il tuo pulsante X)
+// Funzione per fermare la musica
 function stopMusic() {
-    const audioPlayer = document.getElementById('audius-audio-player');
     if (audioPlayer) {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
