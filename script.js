@@ -102,17 +102,14 @@ function stopMusic() {
 // 4. LISTA CANZONI DI NABI (Aggiunte dinamicamente alla libreria)
 // Nota: Gli ID video sono presi dai link ufficiali trovati. Se un video non parte, potrebbe essere bloccato.
 const nabiSongs = [
-    { id: 'cPykUOIGisA', title: 'NEW YORK' },
-    { id: 'lKSPKbBVGgU', title: 'WROOM WROOM' },
-    { id: 'J_p80876Wgw', title: 'CALIBRO' },
-    { id: 'TVqeYBxhPgg', title: 'GRANATA (feat. 22 Simba)' },
-    { id: 'fCE9mDVdr5A', title: 'GUERRILIA' },
-    { id: 'q8PV8gd-Bl0', title: 'ZEPECK' },
-    { id: 'Po25COLLYus', title: 'Notte in Caserma' },
-    { id: 'Va4NxXNziNk', title: 'Opening (feat. EK)' },
-    // Aggiungi qui altri ID se li trovi. La struttura è: { id: 'ID_VIDEO', title: 'TITOLO' },
+    { id: 'fCE9mDVdr5A', title: 'GUERRILIA' }, // Funziona! (Confermato)
+    { id: 'cPykUOIGisA', title: 'NEW YORK' }, // Prova (potrebbe essere bloccato)
+    { id: 'lKSPKbBVGgU', title: 'WROOM WROOM' }, // Prova
+    { id: 'TVqeYBxhPgg', title: 'GRANATA (feat. 22 Simba)' }, // Prova
+    { id: 'J_p80876Wgw', title: 'CALIBRO' }, // Prova
+    { id: 'q8PV8gd-Bl0', title: 'ZEPECK' }, // Prova
+    // Aggiungi qui altri ID. Se non funzionano, cercane altri su YouTube.
 ];
-
 // Funzione per popolare la lista nella schermata Libreria
 document.addEventListener("DOMContentLoaded", () => {
     const trackList = document.querySelector('.track-list');
