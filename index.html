@@ -154,15 +154,27 @@
         </nav>
     </div>
 
-        <!-- MINI PLAYER YOUTUBE (Visibile in basso) -->
-    <div id="mini-player" class="mini-player-hidden">
-        <div id="youtube-player-container"></div>
-        <div class="mini-player-info">
-            <p id="now-playing-title">In riproduzione...</p>
-            <button onclick="stopMusic()" class="close-player-btn"><i class="fas fa-times"></i></button>
-        </div>
-    </div>
+        <!-- ================= NOW PLAYING BAR (Elegante) ================= -->
+        <div id="now-playing-bar">
+            <!-- Barra di progresso sottile in alto -->
+            <div class="progress-bar-bg">
+                <div id="progress-bar-fill"></div>
+            </div>
+            
+            <!-- Contenitore video nascosto per far suonare la musica -->
+            <div id="youtube-player-container" style="display: none;"></div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+            <div class="player-content">
+                <div class="player-info">
+                    <h4 id="now-playing-title">Titolo Canzone</h4>
+                    <p>NABI</p>
+                </div>
+                
+                <div class="player-controls">
+                    <button onclick="seekBackward()" class="ctrl-btn"><i class="fas fa-backward"></i></button>
+                    <button onclick="togglePlay()" id="play-pause-btn" class="ctrl-btn main-ctrl"><i class="fas fa-play"></i></button>
+                    <button onclick="seekForward()" class="ctrl-btn"><i class="fas fa-forward"></i></button>
+                    <button onclick="closePlayer()" class="ctrl-btn close-btn"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+        </div>
