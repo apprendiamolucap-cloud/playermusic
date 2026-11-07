@@ -34,17 +34,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// 3. YOUTUBE PLAYER (Configurato per GitHub Pages)
+// 3. YOUTUBE PLAYER
 var player;
 var isPlayerReady = false;
 
-// Carica l'API di YouTube
+// Carica l'API
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-// Funzione chiamata automaticamente da YouTube quando l'API è pronta
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-player-container', {
         height: '60', 
@@ -56,7 +55,7 @@ function onYouTubeIframeAPIReady() {
             'disablekb': 1,
             'fs': 0,
             'origin': window.location.origin,
-            'referrerPolicy': 'strict-origin-when-cross-origin' // Risolve l'errore 153
+            'referrerPolicy': 'strict-origin-when-cross-origin'
         },
         events: {
             'onReady': function(event) {
@@ -75,23 +74,18 @@ function onYouTubeIframeAPIReady() {
 // Funzione per far partire la musica
 function playYouTube(videoId, songTitle) {
     if (!isPlayerReady) {
-        // Se clicchi troppo velocemente, avvisa ma non bloccare l'app
-        console.log("Player in caricamento...");
         setTimeout(() => {
             if (isPlayerReady) playYouTube(videoId, songTitle);
         }, 1500);
         return;
     }
 
-    // Mostra il mini player
     const miniPlayer = document.getElementById('mini-player');
     miniPlayer.classList.remove('mini-player-hidden');
     miniPlayer.classList.add('mini-player-visible');
 
-    // Mostra il titolo della canzone
     document.getElementById('now-playing-title').innerText = "▶ " + songTitle;
 
-    // Fai partire il video
     player.loadVideoById(videoId);
 }
 
@@ -104,3 +98,49 @@ function stopMusic() {
     miniPlayer.classList.remove('mini-player-visible');
     miniPlayer.classList.add('mini-player-hidden');
 }
+
+// 4. LISTA CANZONI DI NABI (Aggiunte dinamicamente alla libreria)
+// Nota: Gli ID video sono presi dai link ufficiali trovati. Se un video non parte, potrebbe essere bloccato.
+const nabiSongs = [
+    { id: 'cPykUOIGisA', title: 'NEW YORK' },
+    { id: 'lKSPKbBVGgU', title: 'WROOM WROOM' },
+    { id: 'J_p80876Wgw', title: 'CALIBRO' },
+    { id: 'TVqeYBxhPgg', title: 'GRANATA (feat. 22 Simba)' },
+    { id: 'fCE9mDVdr5A', title: 'GUERRILIA' },
+    { id: 'q8PV8gd-Bl0', title: 'ZEPECK' },
+    { id: 'Po25COLLYus', title: 'Notte in Caserma' },
+    { id: 'Va4NxXNziNk', title: 'Opening (feat. EK)' },
+    // Aggiungi qui altri ID se li trovi. La struttura è: { id: 'ID_VIDEO', title: 'TITOLO' },
+];
+
+// Funzione per popolare la lista nella schermata Libreria
+document.addEventListener("DOMContentLoaded", () => {
+    const trackList = document.querySelector('.track-list');
+    if (trackList) {
+        // Svuota la lista esistente per evitare duplicati
+        trackList.innerHTML = '';
+        
+        nabiSongs.forEach((song, index) => {
+            const trackItem = document.createElement('div');
+            trackItem.className = 'track-item';
+            trackItem.setAttribute('onclick', `playYouTube('${song.id}', '${song.title}')`);
+            
+            trackItem.innerHTML = `
+                <span class="track-number">${index + 1}</span>
+                <div class="track-info">
+                    <h4>${song.title}</h4>
+                    <p>NABI</p>
+                </div>
+                <i class="fas fa-play-circle" style="color:#FFB7C5;"></i>
+            `;
+            
+            trackList.appendChild(trackItem);
+        });
+        
+        // Aggiorna il contatore dei brani
+        const playlistInfo = document.querySelector('.playlist-info p');
+        if (playlistInfo) {
+            playlistInfo.innerText = `${nabiSongs.length} brani • Santos_Lukas`;
+        }
+    }
+});
