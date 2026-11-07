@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// YOUTUBE PLAYER
+// YOUTUBE PLAYER (Senza 'mute: 1' per far sentire l'audio)
 let player;
 let isPlayerReady = false;
 let progressInterval;
@@ -41,7 +41,13 @@ document.head.appendChild(tag);
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-player-container', {
         height: '100', width: '100', videoId: '',
-        playerVars: { 'autoplay': 0, 'controls': 0, 'origin': window.location.origin, 'playsinline': 1, 'mute': 1 },
+        playerVars: { 
+            'autoplay': 0, 
+            'controls': 0, 
+            'origin': window.location.origin, 
+            'playsinline': 1
+            // 'mute': 1,  <-- RIMOSSO PER FAR SENTIRE L'AUDIO
+        },
         events: {
             'onReady': () => { isPlayerReady = true; },
             'onStateChange': onPlayerStateChange
@@ -63,15 +69,13 @@ function onPlayerStateChange(event) {
 function playYouTube(videoId, title) {
     if (!isPlayerReady) { alert("Player in caricamento..."); return; }
     
-    // Rimuove la classe hidden e aggiunge visible per far apparire la barra
     const bar = document.getElementById('now-playing-bar');
     bar.classList.remove('hidden');
-    // Piccolo timeout per far partire l'animazione
     setTimeout(() => bar.classList.add('visible'), 10);
     
     document.getElementById('now-playing-title').innerText = title;
     player.loadVideoById(videoId);
-    player.playVideo();
+    // Non forziamo il play qui, l'utente deve premere il pulsante per sentire l'audio
 }
 function togglePlay() {
     if (!player || !isPlayerReady) return;
@@ -84,7 +88,6 @@ function closePlayer() {
     if (player && player.stopVideo) player.stopVideo();
     const bar = document.getElementById('now-playing-bar');
     bar.classList.remove('visible');
-    // Nasconde del tutto dopo l'animazione
     setTimeout(() => bar.classList.add('hidden'), 400);
     document.getElementById('progress-bar-fill').style.width = '0%';
     clearInterval(progressInterval);
@@ -102,14 +105,15 @@ function startProgressBar() {
     }, 500);
 }
 
-// DATABASE CANZONI (Per la ricerca finta)
+// DATABASE CANZONI NABI (Ampliato con i risultati della ricerca)
 const databaseCanzoni = [
     { id: 'fCE9mDVdr5A', title: 'GUERRILIA', artist: 'NABI' },
     { id: 'lKSPKbBVGgU', title: 'WROOM WROOM', artist: 'NABI' },
     { id: 'J_p80876Wgw', title: 'CALIBRO', artist: 'NABI' },
-    { id: 'TVqeYBxhPgg', title: 'GRANATA', artist: 'NABI' },
+    { id: 'TVqeYBxhPgg', title: 'GRANATA (feat. 22 Simba)', artist: 'NABI' },
     { id: 'q8PV8gd-Bl0', title: 'ZEPECK', artist: 'NABI' },
-    { id: 'Po25COLLYus', title: 'Notte in Caserma', artist: 'NABI' }
+    { id: 'Po25COLLYus', title: 'Notte in Caserma', artist: 'NABI' },
+    { id: 'cPykUOIGisA', title: 'NEW YORK', artist: 'NABI' }
 ];
 
 // FUNZIONE DI RICERCA
